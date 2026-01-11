@@ -102,8 +102,14 @@ h1 {
     font-weight: 500;
 }
 
+.area-selector-row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: stretch;
+}
+
 .area-selector select {
-    width: 100%;
+    flex: 1;
     padding: 0.75rem;
     font-size: 1rem;
     border: 1px solid var(--border-color);
@@ -118,6 +124,29 @@ h1 {
 .area-selector select:focus {
     border-color: var(--primary-color);
     outline: none;
+}
+
+.detect-btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: background-color 0.2s;
+}
+
+.detect-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+.detect-btn:disabled {
+    background-color: var(--text-light);
+    cursor: not-allowed;
+    opacity: 0.6;
 }
 
 /* Status message */
@@ -309,6 +338,14 @@ footer p {
     .nav-links {
         gap: 1rem;
         font-size: 0.9rem;
+    }
+
+    .area-selector-row {
+        flex-direction: column;
+    }
+
+    .detect-btn {
+        width: 100%;
     }
 
     .price-badges {

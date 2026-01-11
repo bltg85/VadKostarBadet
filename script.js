@@ -159,6 +159,91 @@ function hideStatus() {
     statusEl.className = 'status';
 }
 
+// Convert latitude to Swedish elområde
+function latToElområde(latitude) {
+    // Simple latitude-based mapping for Swedish elområden
+    // SE1: Norra Sverige (Norrbotten, Västerbotten) - lat >= 63
+    // SE2: Norra Mellansverige - lat >= 60 && lat < 63
+    // SE3: Södra Mellansverige - lat >= 58 && lat < 60
+    // SE4: Södra Sverige (Skåne, etc.) - lat < 58
+    if (latitude >= 63) {
+        return 'SE1';
+    } else if (latitude >= 60) {
+        return 'SE2';
+    } else if (latitude >= 58) {
+        return 'SE3';
+    } else {
+        return 'SE4';
+    }
+}
+
+// Detect elområde using geolocation
+function detectElområde() {
+    const detectBtn = document.getElementById('detect-area-btn');
+    const areaSelect = document.getElementById('area-select');
+    
+    // Check if geolocation is supported
+    if (!navigator.geolocation) {
+        showError('Din webbläsare stödjer inte geolocation. Välj elområde manuellt.');
+        return;
+    }
+    
+    // Disable button while detecting
+    detectBtn.disabled = true;
+    showStatus('Hämtar din position...', 'loading');
+    
+    // Request position
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            // Success - convert to elområde
+            const latitude = position.coords.latitude;
+            const detectedArea = latToElområde(latitude);
+            
+            // Update dropdown
+            areaSelect.value = detectedArea;
+            
+            // Save to localStorage
+            saveSelectedArea(detectedArea);
+            
+            // Re-enable button
+            detectBtn.disabled = false;
+            
+            // Hide current status (loadPrices will show its own loading message)
+            hideStatus();
+            
+            // Load prices for detected area
+            loadPrices(detectedArea);
+        },
+        (error) => {
+            // Error handling
+            detectBtn.disabled = false;
+            let errorMessage = 'Kunde inte hämta din position. ';
+            
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    errorMessage += 'Du nekarde åtkomst till position. Välj elområde manuellt.';
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    errorMessage += 'Position kunde inte hittas. Välj elområde manuellt.';
+                    break;
+                case error.TIMEOUT:
+                    errorMessage += 'Tidsgränsen nåddes. Välj elområde manuellt.';
+                    break;
+                default:
+                    errorMessage += 'Ett fel uppstod. Välj elområde manuellt.';
+                    break;
+            }
+            
+            showError(errorMessage);
+        },
+        {
+            enableHighAccuracy: false,
+            timeout: 10000,
+            maximumAge: 300000 // Cache position for 5 minutes
+        }
+    );
+}
+
 // Load and display prices
 async function loadPrices(area) {
     showLoading();
@@ -188,4 +273,10 @@ document.addEventListener('DOMContentLoaded', () => {
         saveSelectedArea(selectedArea);
         loadPrices(selectedArea);
     });
+
+    // Handle detect area button
+    const detectBtn = document.getElementById('detect-area-btn');
+    if (detectBtn) {
+        detectBtn.addEventListener('click', detectElområde);
+    }
 });
