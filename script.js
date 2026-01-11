@@ -28,9 +28,15 @@ function getTodayDate() {
     return `${year}/${month}-${day}`;
 }
 
-// Get current hour (0-23)
+// Get current hour (0-23) in Europe/Stockholm timezone
 function getCurrentHour() {
-    return new Date().getHours();
+    const now = new Date();
+    const stockholmTime = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'Europe/Stockholm',
+        hour: 'numeric',
+        hour12: false
+    }).formatToParts(now);
+    return parseInt(stockholmTime.find(part => part.type === 'hour').value);
 }
 
 // Fetch electricity prices
@@ -120,6 +126,14 @@ function updateUI(prices) {
     document.getElementById('bath-cheap').textContent = formatPrice(bathCheap);
     document.getElementById('bath-expensive').textContent = formatPrice(bathExpensive);
 
+    // Format time from time_start (e.g., "2024-01-15T14:00:00+01:00" -> "14:00")
+    function formatTime(timeStart) {
+        const date = new Date(timeStart);
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        return `${hours}:${minutes}`;
+    }
+
     // Update badges
     const badgeClass = getBadgeClass(currentPrice.SEK_per_kWh, minPrice, maxPrice);
     const badgesHTML = `
@@ -127,10 +141,10 @@ function updateUI(prices) {
             Just nu: ${badgeClass === 'cheap' ? 'Billigt' : badgeClass === 'expensive' ? 'Dyrt' : 'Normalt'}
         </div>
         <div class="badge cheap">
-            Billigast: ${prices[minIndex].time_start.slice(0, 5)}
+            Billigast: ${formatTime(prices[minIndex].time_start)}
         </div>
         <div class="badge expensive">
-            Dyrast: ${prices[maxIndex].time_start.slice(0, 5)}
+            Dyrast: ${formatTime(prices[maxIndex].time_start)}
         </div>
     `;
     document.getElementById('price-badges').innerHTML = badgesHTML;
