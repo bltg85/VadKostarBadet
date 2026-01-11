@@ -179,8 +179,14 @@ function latToElområde(latitude) {
 
 // Detect elområde using geolocation
 function detectElområde() {
+    console.log('detectElområde called');
     const detectBtn = document.getElementById('detect-area-btn');
     const areaSelect = document.getElementById('area-select');
+    
+    if (!detectBtn || !areaSelect) {
+        console.error('Could not find detect button or area select');
+        return;
+    }
     
     // Check if geolocation is supported
     if (!navigator.geolocation) {
@@ -276,7 +282,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle detect area button
     const detectBtn = document.getElementById('detect-area-btn');
+    console.log('Detect button found:', detectBtn);
     if (detectBtn) {
         detectBtn.addEventListener('click', detectElområde);
+        console.log('Event listener added to detect button');
+    } else {
+        console.error('Detect button not found in DOM');
     }
 });
