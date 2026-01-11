@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vad Kostar Badet? – Elprisberäkning för dusch och bad</title>
+    <meta name="description" content="Se vad det kostar att duscha och bada just nu baserat på aktuella elpriser. Beräkna kostnaden för ditt elområde.">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="container">
+                <a href="/" class="logo">VadKostarBadet.se</a>
+                <ul class="nav-links">
+                    <li><a href="/">Hem</a></li>
+                    <li><a href="/om">Om</a></li>
+                    <li><a href="/kontakt">Kontakt</a></li>
+                    <li><a href="/integritetspolicy">Integritetspolicy</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <h1>Vad kostar badet just nu?</h1>
+        <p class="subtitle">Se vad det kostar att duscha och bada baserat på aktuella elpriser</p>
+
+        <div class="area-selector">
+            <label for="area-select">Elområde:</label>
+            <select id="area-select">
+                <option value="SE1">SE1 (Norra Sverige)</option>
+                <option value="SE2">SE2 (Norra Mellansverige)</option>
+                <option value="SE3">SE3 (Södra Mellansverige)</option>
+                <option value="SE4" selected>SE4 (Södra Sverige/Skåne)</option>
+            </select>
+        </div>
+
+        <div id="status" class="status"></div>
+
+        <div id="price-badges" class="price-badges"></div>
+
+        <div class="calculations">
+            <div class="calculation-card">
+                <h2>💧 Dusch (10 min, 6 kWh)</h2>
+                <div class="price-display">
+                    <div class="price-item">
+                        <span class="label">Just nu:</span>
+                        <span id="shower-now" class="price">–</span>
+                    </div>
+                    <div class="price-item">
+                        <span class="label">Billigast idag:</span>
+                        <span id="shower-cheap" class="price">–</span>
+                    </div>
+                    <div class="price-item">
+                        <span class="label">Dyrast idag:</span>
+                        <span id="shower-expensive" class="price">–</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="calculation-card">
+                <h2>🛁 Bad (160 liter, 8 kWh)</h2>
+                <div class="price-display">
+                    <div class="price-item">
+                        <span class="label">Just nu:</span>
+                        <span id="bath-now" class="price">–</span>
+                    </div>
+                    <div class="price-item">
+                        <span class="label">Billigast idag:</span>
+                        <span id="bath-cheap" class="price">–</span>
+                    </div>
+                    <div class="price-item">
+                        <span class="label">Dyrast idag:</span>
+                        <span id="bath-expensive" class="price">–</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <h3>Hur beräknas kostnaden?</h3>
+            <ul>
+                <li><strong>Dusch:</strong> 10 minuter, 6 kWh elförbrukning</li>
+                <li><strong>Bad:</strong> 160 liter vatten, 8 kWh elförbrukning</li>
+                <li><strong>Vatten + avlopp:</strong> 30 kr/m³ (0,16 m³ = 4,80 kr för bad)</li>
+                <li>Elpriset är timpris per kWh från elprisetjustnu.se</li>
+            </ul>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 VadKostarBadet.se</p>
+            <p>
+                <a href="/om">Om</a> | 
+                <a href="/kontakt">Kontakt</a> | 
+                <a href="/integritetspolicy">Integritetspolicy</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
