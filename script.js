@@ -273,6 +273,21 @@ function updateInsights(showerNow, showerCheap, bathNow, bathCheap, minPrice, ma
     insightsEl.innerHTML = insightsHTML;
 }
 
+// Format price for graph (simpler format for mobile)
+function formatPriceForGraph(value, isMobile) {
+    if (isMobile) {
+        // On mobile, show as öre if less than 1 kr, otherwise as kr
+        const ore = Math.round(value * 100);
+        if (ore < 100) {
+            return `${ore} öre`;
+        } else {
+            return `${(ore / 100).toFixed(1)} kr`;
+        }
+    } else {
+        return formatPrice(value);
+    }
+}
+
 // Draw price graph
 function drawPriceGraph(prices, currentPrice) {
     const canvas = document.getElementById('price-graph');
@@ -281,8 +296,13 @@ function drawPriceGraph(prices, currentPrice) {
     const ctx = canvas.getContext('2d');
     const container = canvas.parentElement;
     const width = container.clientWidth - 32; // Account for padding
-    const height = 300;
-    const padding = { top: 20, right: 20, bottom: 40, left: 50 };
+    const isMobile = window.innerWidth < 768;
+    const height = isMobile ? 250 : 300;
+    
+    // Adjust padding for mobile
+    const padding = isMobile 
+        ? { top: 15, right: 10, bottom: 35, left: 40 }
+        : { top: 20, right: 20, bottom: 40, left: 50 };
     const graphWidth = width - padding.left - padding.right;
     const graphHeight = height - padding.top - padding.bottom;
     
@@ -299,11 +319,14 @@ function drawPriceGraph(prices, currentPrice) {
     // Clear canvas
     ctx.clearRect(0, 0, width, height);
     
+    // Adjust number of grid lines for mobile
+    const gridLines = isMobile ? 3 : 5;
+    
     // Draw grid lines
     ctx.strokeStyle = '#e5e7eb';
     ctx.lineWidth = 1;
-    for (let i = 0; i <= 5; i++) {
-        const y = padding.top + (graphHeight / 5) * i;
+    for (let i = 0; i <= gridLines; i++) {
+        const y = padding.top + (graphHeight / gridLines) * i;
         ctx.beginPath();
         ctx.moveTo(padding.left, y);
         ctx.lineTo(width - padding.right, y);
@@ -321,27 +344,34 @@ function drawPriceGraph(prices, currentPrice) {
     
     // Draw labels
     ctx.fillStyle = '#6b7280';
-    ctx.font = '12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+    const fontSize = isMobile ? 11 : 12;
+    ctx.font = `${fontSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
     ctx.textAlign = 'right';
     ctx.textBaseline = 'middle';
     
-    // Y-axis labels (price)
-    for (let i = 0; i <= 5; i++) {
-        const value = maxCost - (costRange / 5) * i;
-        const y = padding.top + (graphHeight / 5) * i;
-        ctx.fillText(formatPrice(value), padding.left - 10, y);
+    // Y-axis labels (price) - fewer on mobile
+    for (let i = 0; i <= gridLines; i++) {
+        const value = maxCost - (costRange / gridLines) * i;
+        const y = padding.top + (graphHeight / gridLines) * i;
+        const priceText = formatPriceForGraph(value, isMobile);
+        ctx.fillText(priceText, padding.left - 8, y);
     }
     
-    // X-axis labels (time)
+    // X-axis labels (time) - fewer and simpler on mobile
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
-    const labelStep = Math.max(1, Math.floor(prices.length / 8));
+    const timeLabels = isMobile ? 5 : 8;
+    const labelStep = Math.max(1, Math.floor(prices.length / timeLabels));
+    
     for (let i = 0; i < prices.length; i += labelStep) {
         const date = new Date(prices[i].time_start);
         const hours = String(date.getHours()).padStart(2, '0');
         const minutes = String(date.getMinutes()).padStart(2, '0');
         const x = padding.left + (graphWidth / (prices.length - 1)) * i;
-        ctx.fillText(`${hours}:${minutes}`, x, height - padding.bottom + 10);
+        
+        // On mobile, show only hours (e.g., "12") instead of "12:00"
+        const timeText = isMobile ? hours : `${hours}:${minutes}`;
+        ctx.fillText(timeText, x, height - padding.bottom + 8);
     }
     
     // Draw line graph
@@ -410,6 +440,24 @@ function drawPriceGraph(prices, currentPrice) {
     }));
     canvas.padding = padding;
     canvas.graphWidth = graphWidth;
+    canvas.isMobile = isMobile;
+}
+
+// Resize canvas when window resizes
+function resizeCanvas() {
+    const canvas = document.getElementById('price-graph');
+    if (!canvas || !canvas.priceData) return;
+    
+    // Get the prices from stored data
+    const prices = canvas.priceData.map(d => d.price);
+    const currentPrice = prices.find(p => {
+        const currentHour = getCurrentHour();
+        const priceHour = new Date(p.time_start).toLocaleString('sv-SE', { timeZone: 'Europe/Stockholm', hour: '2-digit', hour12: false });
+        return parseInt(priceHour) === currentHour;
+    }) || prices[0];
+    
+    // Redraw graph with new dimensions
+    drawPriceGraph(prices, currentPrice);
 }
 
 // Handle graph interactivity
@@ -441,7 +489,9 @@ function setupGraphInteractivity() {
         if (closest && minDistance < 30) {
             const hours = String(closest.time.getHours()).padStart(2, '0');
             const minutes = String(closest.time.getMinutes()).padStart(2, '0');
-            tooltip.textContent = `${hours}:${minutes} - ${formatPrice(closest.cost)}`;
+            const isMobile = window.innerWidth < 768;
+            const priceText = formatPriceForGraph(closest.cost, isMobile);
+            tooltip.textContent = `${hours}:${minutes} - ${priceText}`;
             tooltip.classList.add('visible');
             
             // Position tooltip
@@ -626,4 +676,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Setup graph interactivity
     setupGraphInteractivity();
+    
+    // Redraw graph on window resize
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(resizeCanvas, 250);
+    });
 });

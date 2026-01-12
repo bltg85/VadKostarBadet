@@ -535,6 +535,8 @@ main {
     border-radius: var(--radius);
     padding: 1rem;
     border: 1px solid var(--border-light);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 #price-graph {
