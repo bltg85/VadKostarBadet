@@ -86,12 +86,15 @@ Versionen visas i footern på varje sida. Den visar antingen:
 
 ### Uppdatera version automatiskt
 
-**Rekommenderat:** Kör detta innan varje commit/push:
+**Rekommenderat workflow:** Kör detta innan varje commit/push:
 ```powershell
 .\update-version-simple.ps1
+git add index.html om.html kontakt.html integritetspolicy.html
+git commit -m "Din commit-meddelande + version update"
+git push
 ```
 
-Detta uppdaterar meta-taggen i alla HTML-filer med senaste commit hash. Efter att ha kört scriptet, commita ändringarna tillsammans med dina andra ändringar.
+Detta uppdaterar meta-taggen i alla HTML-filer med senaste commit hash. Scriptet uppdaterar versionen baserat på den commit du just skapade.
 
 **Alternativ:**
 ```bash
@@ -105,4 +108,4 @@ npm run update-version
 .\update-version.bat
 ```
 
-**Tips:** Du kan lägga till `.\update-version-simple.ps1` i din commit-workflow så att versionen alltid är uppdaterad.
+**Automatisk uppdatering:** En git pre-push hook försöker automatiskt uppdatera versionen när du pushar, men den skapar inte en ny commit automatiskt. Du behöver fortfarande commita version-uppdateringen manuellt.

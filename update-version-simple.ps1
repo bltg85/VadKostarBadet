@@ -11,7 +11,17 @@ try {
         if (Test-Path $file) {
             $content = Get-Content $file -Raw -Encoding UTF8
             # Simple string replacement - find the meta tag and replace content value
-            $content = $content -replace '(name="git-commit"\s+content=")[^"]*(")', "`$1$commitHash`$2"
+            # First try to find and replace existing meta tag
+            if ($content -match 'name="git-commit"') {
+                $content = $content -replace '(name="git-commit"\s+content=")[^"]*(")', "`$1$commitHash`$2"
+            } else {
+                # If meta tag is broken or missing, replace any broken version
+                $content = $content -replace '<meta\s+\$1[^"]*">', "<meta name=`"git-commit`" content=`"$commitHash`">"
+                # Or add it after description if completely missing
+                if ($content -notmatch 'name="git-commit"') {
+                    $content = $content -replace '(<meta name="description"[^>]*>)', "`$1`n    <meta name=`"git-commit`" content=`"$commitHash`">"
+                }
+            }
             Set-Content $file -Value $content -Encoding UTF8 -NoNewline
             Write-Host "  Updated $file" -ForegroundColor Green
         }
