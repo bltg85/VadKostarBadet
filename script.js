@@ -164,6 +164,9 @@ function updateUI(prices) {
         return `${hours}:${minutes}`;
     }
 
+    // Draw price graph
+    drawPriceGraph(prices, currentPrice);
+
     // Update badges with animation
     const badgeClass = getBadgeClass(currentPrice.SEK_per_kWh, minPrice, maxPrice);
     const badgesHTML = `
@@ -217,6 +220,209 @@ function showLoading() {
 function hideStatus() {
     const statusEl = document.getElementById('status');
     statusEl.className = 'status';
+}
+
+// Draw price graph
+function drawPriceGraph(prices, currentPrice) {
+    const canvas = document.getElementById('price-graph');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    const container = canvas.parentElement;
+    const width = container.clientWidth - 32; // Account for padding
+    const height = 300;
+    const padding = { top: 20, right: 20, bottom: 40, left: 50 };
+    const graphWidth = width - padding.left - padding.right;
+    const graphHeight = height - padding.top - padding.bottom;
+    
+    // Set canvas size
+    canvas.width = width;
+    canvas.height = height;
+    
+    // Calculate bath costs for all hours
+    const bathCosts = prices.map(p => calculateBathCost(p.SEK_per_kWh));
+    const minCost = Math.min(...bathCosts);
+    const maxCost = Math.max(...bathCosts);
+    const costRange = maxCost - minCost || 1;
+    
+    // Clear canvas
+    ctx.clearRect(0, 0, width, height);
+    
+    // Draw grid lines
+    ctx.strokeStyle = '#e5e7eb';
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= 5; i++) {
+        const y = padding.top + (graphHeight / 5) * i;
+        ctx.beginPath();
+        ctx.moveTo(padding.left, y);
+        ctx.lineTo(width - padding.right, y);
+        ctx.stroke();
+    }
+    
+    // Draw axes
+    ctx.strokeStyle = '#6b7280';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(padding.left, padding.top);
+    ctx.lineTo(padding.left, height - padding.bottom);
+    ctx.lineTo(width - padding.right, height - padding.bottom);
+    ctx.stroke();
+    
+    // Draw labels
+    ctx.fillStyle = '#6b7280';
+    ctx.font = '12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    
+    // Y-axis labels (price)
+    for (let i = 0; i <= 5; i++) {
+        const value = maxCost - (costRange / 5) * i;
+        const y = padding.top + (graphHeight / 5) * i;
+        ctx.fillText(formatPrice(value), padding.left - 10, y);
+    }
+    
+    // X-axis labels (time)
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    const labelStep = Math.max(1, Math.floor(prices.length / 8));
+    for (let i = 0; i < prices.length; i += labelStep) {
+        const date = new Date(prices[i].time_start);
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const x = padding.left + (graphWidth / (prices.length - 1)) * i;
+        ctx.fillText(`${hours}:${minutes}`, x, height - padding.bottom + 10);
+    }
+    
+    // Draw line graph
+    ctx.strokeStyle = '#2563eb';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    
+    prices.forEach((price, index) => {
+        const cost = calculateBathCost(price.SEK_per_kWh);
+        const x = padding.left + (graphWidth / (prices.length - 1)) * index;
+        const y = padding.top + graphHeight - ((cost - minCost) / costRange) * graphHeight;
+        
+        if (index === 0) {
+            ctx.moveTo(x, y);
+        } else {
+            ctx.lineTo(x, y);
+        }
+    });
+    ctx.stroke();
+    
+    // Draw area under curve
+    ctx.fillStyle = 'rgba(37, 99, 235, 0.1)';
+    ctx.beginPath();
+    ctx.moveTo(padding.left, height - padding.bottom);
+    prices.forEach((price, index) => {
+        const cost = calculateBathCost(price.SEK_per_kWh);
+        const x = padding.left + (graphWidth / (prices.length - 1)) * index;
+        const y = padding.top + graphHeight - ((cost - minCost) / costRange) * graphHeight;
+        ctx.lineTo(x, y);
+    });
+    ctx.lineTo(width - padding.right, height - padding.bottom);
+    ctx.closePath();
+    ctx.fill();
+    
+    // Draw points
+    prices.forEach((price, index) => {
+        const cost = calculateBathCost(price.SEK_per_kWh);
+        const x = padding.left + (graphWidth / (prices.length - 1)) * index;
+        const y = padding.top + graphHeight - ((cost - minCost) / costRange) * graphHeight;
+        
+        ctx.fillStyle = '#2563eb';
+        ctx.beginPath();
+        ctx.arc(x, y, 4, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Highlight current hour
+        if (price === currentPrice) {
+            ctx.fillStyle = '#ef4444';
+            ctx.beginPath();
+            ctx.arc(x, y, 6, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(x, y, 3, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    });
+    
+    // Store data for interactivity
+    canvas.priceData = prices.map((price, index) => ({
+        price,
+        cost: calculateBathCost(price.SEK_per_kWh),
+        x: padding.left + (graphWidth / (prices.length - 1)) * index,
+        y: padding.top + graphHeight - ((calculateBathCost(price.SEK_per_kWh) - minCost) / costRange) * graphHeight,
+        time: new Date(price.time_start)
+    }));
+    canvas.padding = padding;
+    canvas.graphWidth = graphWidth;
+}
+
+// Handle graph interactivity
+function setupGraphInteractivity() {
+    const canvas = document.getElementById('price-graph');
+    const tooltip = document.getElementById('graph-tooltip');
+    
+    if (!canvas || !tooltip) return;
+    
+    function showTooltip(e) {
+        if (!canvas.priceData) return;
+        
+        const rect = canvas.getBoundingClientRect();
+        const x = (e.clientX || e.touches?.[0]?.clientX) - rect.left;
+        const y = (e.clientY || e.touches?.[0]?.clientY) - rect.top;
+        
+        // Find closest data point
+        let closest = null;
+        let minDistance = Infinity;
+        
+        canvas.priceData.forEach(data => {
+            const distance = Math.abs(data.x - x);
+            if (distance < minDistance) {
+                minDistance = distance;
+                closest = data;
+            }
+        });
+        
+        if (closest && minDistance < 30) {
+            const hours = String(closest.time.getHours()).padStart(2, '0');
+            const minutes = String(closest.time.getMinutes()).padStart(2, '0');
+            tooltip.textContent = `${hours}:${minutes} - ${formatPrice(closest.cost)}`;
+            tooltip.classList.add('visible');
+            
+            // Position tooltip
+            const tooltipX = Math.min(x, rect.width - tooltip.offsetWidth - 10);
+            const tooltipY = y - tooltip.offsetHeight - 15;
+            tooltip.style.left = tooltipX + 'px';
+            tooltip.style.top = tooltipY + 'px';
+        }
+    }
+    
+    function hideTooltip() {
+        tooltip.classList.remove('visible');
+    }
+    
+    // Mouse events
+    canvas.addEventListener('mousemove', showTooltip);
+    canvas.addEventListener('mouseleave', hideTooltip);
+    canvas.addEventListener('mouseout', hideTooltip);
+    
+    // Touch events
+    canvas.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        showTooltip(e);
+    });
+    canvas.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        showTooltip(e);
+    });
+    canvas.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        setTimeout(hideTooltip, 1000); // Keep tooltip visible for 1 second
+    });
 }
 
 // Convert latitude to Swedish elområde
@@ -364,4 +570,7 @@ document.addEventListener('DOMContentLoaded', () => {
             versionEl.textContent = `1.0.0-${buildTime}`;
         }
     }
+
+    // Setup graph interactivity
+    setupGraphInteractivity();
 });

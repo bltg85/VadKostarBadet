@@ -431,6 +431,90 @@ h1 {
     background-clip: text;
 }
 
+/* Graph card */
+.graph-card {
+    background: var(--bg-color);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+}
+
+.graph-card:hover {
+    box-shadow: var(--shadow-lg);
+}
+
+.graph-card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.graph-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--bg-light) 0%, #ffffff 100%);
+    border-radius: var(--radius);
+    padding: 1rem;
+    border: 1px solid var(--border-light);
+}
+
+#price-graph {
+    width: 100%;
+    height: auto;
+    display: block;
+    cursor: crosshair;
+    touch-action: none;
+}
+
+.graph-tooltip {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    font-weight: 600;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+    z-index: 1000;
+    box-shadow: var(--shadow-lg);
+    white-space: nowrap;
+}
+
+.graph-tooltip.visible {
+    opacity: 1;
+}
+
+.graph-tooltip::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid rgba(0, 0, 0, 0.9);
+}
+
+.graph-note {
+    text-align: center;
+    color: var(--text-light);
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    font-style: italic;
+}
+
 /* Info box */
 .info-box {
     background: var(--bg-color);
@@ -611,6 +695,18 @@ footer p:last-child {
 
     .calculation-card {
         padding: 1.5rem;
+    }
+
+    .graph-card {
+        padding: 1.5rem;
+    }
+
+    .graph-container {
+        padding: 0.75rem;
+    }
+
+    #price-graph {
+        height: 250px;
     }
 
     .price-item {
