@@ -132,29 +132,12 @@ function updateUI(prices) {
     const bathCheap = calculateBathCost(minPrice);
     const bathExpensive = calculateBathCost(maxPrice);
 
-    // Update price displays with animation
-    const priceElements = [
-        { id: 'shower-now', value: formatPrice(showerNow) },
-        { id: 'shower-cheap', value: formatPrice(showerCheap) },
-        { id: 'shower-expensive', value: formatPrice(showerExpensive) },
-        { id: 'bath-now', value: formatPrice(bathNow) },
-        { id: 'bath-cheap', value: formatPrice(bathCheap) },
-        { id: 'bath-expensive', value: formatPrice(bathExpensive) }
-    ];
-
-    priceElements.forEach((item, index) => {
-        const element = document.getElementById(item.id);
-        if (element) {
-            element.style.opacity = '0';
-            element.style.transform = 'translateY(10px)';
-            setTimeout(() => {
-                element.textContent = item.value;
-                element.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-                element.style.opacity = '1';
-                element.style.transform = 'translateY(0)';
-            }, index * 50);
-        }
-    });
+    // Update dashboard cards with new structure
+    updateDashboardCard('bath', bathNow, bathCheap, bathExpensive, prices[minIndex].time_start, prices[maxIndex].time_start, currentPrice.SEK_per_kWh, minPrice, maxPrice);
+    updateDashboardCard('shower', showerNow, showerCheap, showerExpensive, prices[minIndex].time_start, prices[maxIndex].time_start, currentPrice.SEK_per_kWh, minPrice, maxPrice);
+    
+    // Update insights
+    updateInsights(showerNow, showerCheap, bathNow, bathCheap, minPrice, maxPrice);
 
     // Format time from time_start (e.g., "2024-01-15T14:00:00+01:00" -> "14:00")
     function formatTime(timeStart) {
@@ -166,60 +149,128 @@ function updateUI(prices) {
 
     // Draw price graph
     drawPriceGraph(prices, currentPrice);
-
-    // Update badges with animation
-    const badgeClass = getBadgeClass(currentPrice.SEK_per_kWh, minPrice, maxPrice);
-    const badgesHTML = `
-        <div class="badge ${badgeClass}" style="opacity: 0; transform: scale(0.9); animation: fadeInScale 0.4s ease-out 0.1s forwards;">
-            Just nu: ${badgeClass === 'cheap' ? 'Billigt' : badgeClass === 'expensive' ? 'Dyrt' : 'Normalt'}
-        </div>
-        <div class="badge cheap" style="opacity: 0; transform: scale(0.9); animation: fadeInScale 0.4s ease-out 0.2s forwards;">
-            Billigast: ${formatTime(prices[minIndex].time_start)}
-        </div>
-        <div class="badge expensive" style="opacity: 0; transform: scale(0.9); animation: fadeInScale 0.4s ease-out 0.3s forwards;">
-            Dyrast: ${formatTime(prices[maxIndex].time_start)}
-        </div>
-    `;
-    const badgesContainer = document.getElementById('price-badges');
-    badgesContainer.innerHTML = badgesHTML;
-    
-    // Add animation keyframes if not already present
-    if (!document.getElementById('badge-animations')) {
-        const style = document.createElement('style');
-        style.id = 'badge-animations';
-        style.textContent = `
-            @keyframes fadeInScale {
-                to {
-                    opacity: 1;
-                    transform: scale(1);
-                }
-            }
-        `;
-        document.head.appendChild(style);
-    }
 }
 
 // Show status message
 function showStatus(message, type) {
     const statusEl = document.getElementById('status');
+    if (!statusEl) return;
     statusEl.textContent = message;
     statusEl.className = `status ${type}`;
 }
 
-// Show error
+// Show error with styled alert
 function showError(message) {
-    showStatus(message, 'error');
+    const statusEl = document.getElementById('status');
+    if (!statusEl) return;
+    statusEl.innerHTML = `
+        <div class="alert alert-error">
+            <strong>Fel:</strong> ${message}
+        </div>
+    `;
+    statusEl.className = 'status error';
 }
 
-// Show loading
+// Show loading with skeleton
 function showLoading() {
     showStatus('Hämtar elpriser...', 'loading');
+    // Show loading skeleton in cards
+    showCardSkeleton();
+}
+
+// Show card skeleton while loading
+function showCardSkeleton() {
+    const cards = document.querySelectorAll('.dashboard-card .price-large');
+    cards.forEach(card => {
+        card.textContent = '...';
+        card.style.opacity = '0.5';
+    });
+}
+
+// Hide card skeleton
+function hideCardSkeleton() {
+    const cards = document.querySelectorAll('.dashboard-card .price-large');
+    cards.forEach(card => {
+        card.style.opacity = '1';
+    });
 }
 
 // Hide status
 function hideStatus() {
     const statusEl = document.getElementById('status');
     statusEl.className = 'status';
+}
+
+// Update dashboard card
+function updateDashboardCard(type, now, cheap, expensive, cheapTime, expensiveTime, currentPrice, minPrice, maxPrice) {
+    const badgeClass = getBadgeClass(currentPrice, minPrice, maxPrice);
+    const badgeText = badgeClass === 'cheap' ? 'Billigt' : badgeClass === 'expensive' ? 'Dyrt' : 'Normalt';
+    
+    // Format time helper
+    function formatTime(timeStart) {
+        const date = new Date(timeStart);
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        return `${hours}:${minutes}`;
+    }
+    
+    // Update primary price
+    const nowEl = document.getElementById(`${type}-now`);
+    if (nowEl) {
+        nowEl.style.opacity = '0';
+        setTimeout(() => {
+            nowEl.textContent = formatPrice(now);
+            nowEl.style.transition = 'opacity 0.3s ease';
+            nowEl.style.opacity = '1';
+        }, 100);
+    }
+    
+    // Update badge
+    const badgeEl = document.getElementById(`${type}-badge`);
+    if (badgeEl) {
+        badgeEl.textContent = badgeText;
+        badgeEl.className = `price-badge ${badgeClass}`;
+    }
+    
+    // Update secondary prices
+    const cheapEl = document.getElementById(`${type}-cheap`);
+    const expensiveEl = document.getElementById(`${type}-expensive`);
+    const cheapTimeEl = document.getElementById(`${type}-cheap-time`);
+    const expensiveTimeEl = document.getElementById(`${type}-expensive-time`);
+    
+    if (cheapEl) {
+        cheapEl.textContent = formatPrice(cheap);
+        if (cheapTimeEl) {
+            cheapTimeEl.textContent = `(${formatTime(cheapTime)})`;
+        }
+    }
+    
+    if (expensiveEl) {
+        expensiveEl.textContent = formatPrice(expensive);
+        if (expensiveTimeEl) {
+            expensiveTimeEl.textContent = `(${formatTime(expensiveTime)})`;
+        }
+    }
+}
+
+// Update insights section
+function updateInsights(showerNow, showerCheap, bathNow, bathCheap, minPrice, maxPrice) {
+    const insightsEl = document.getElementById('insights');
+    if (!insightsEl) return;
+    
+    const showerSavings = showerNow - showerCheap;
+    const bathSavings = bathNow - bathCheap;
+    const priceDiff = ((maxPrice - minPrice) / minPrice) * 100;
+    
+    let insightsHTML = '';
+    
+    if (showerSavings > 0 || bathSavings > 0) {
+        insightsHTML += `<p>Om du väntar till billigaste timmen sparar du <strong>${formatPrice(bathSavings)}</strong> på ett bad och <strong>${formatPrice(showerSavings)}</strong> på en dusch.</p>`;
+    }
+    
+    insightsHTML += `<p>Skillnad mellan billigast och dyrast idag: <strong>${priceDiff.toFixed(1)}%</strong></p>`;
+    
+    insightsEl.innerHTML = insightsHTML;
 }
 
 // Draw price graph
@@ -522,8 +573,10 @@ async function loadPrices(area) {
     try {
         const prices = await fetchPrices(area);
         hideStatus();
+        hideCardSkeleton();
         updateUI(prices);
     } catch (error) {
+        hideCardSkeleton();
         showError('Kunde inte hämta elpriser. Försök igen senare.');
         console.error(error);
     }
