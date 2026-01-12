@@ -93,8 +93,23 @@ function getBadgeClass(price, minPrice, maxPrice) {
 
 // Update UI with prices
 function updateUI(prices) {
+    // Get current hour in Stockholm timezone
     const currentHour = getCurrentHour();
-    const currentPrice = prices[currentHour];
+    
+    // Find the price entry that matches current hour
+    // Prices array contains objects with time_start in ISO format
+    // We need to find the entry where the hour (in Stockholm timezone) matches current hour
+    const currentPrice = prices.find(p => {
+        const priceDate = new Date(p.time_start);
+        // Get hour in Stockholm timezone from the price entry
+        const priceHourParts = new Intl.DateTimeFormat('en-US', {
+            timeZone: 'Europe/Stockholm',
+            hour: 'numeric',
+            hour12: false
+        }).formatToParts(priceDate);
+        const priceHour = parseInt(priceHourParts.find(part => part.type === 'hour').value);
+        return priceHour === currentHour;
+    });
     
     if (!currentPrice) {
         showError('Kunde inte hitta pris för aktuell timme');
