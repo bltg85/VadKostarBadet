@@ -132,14 +132,29 @@ function updateUI(prices) {
     const bathCheap = calculateBathCost(minPrice);
     const bathExpensive = calculateBathCost(maxPrice);
 
-    // Update price displays
-    document.getElementById('shower-now').textContent = formatPrice(showerNow);
-    document.getElementById('shower-cheap').textContent = formatPrice(showerCheap);
-    document.getElementById('shower-expensive').textContent = formatPrice(showerExpensive);
+    // Update price displays with animation
+    const priceElements = [
+        { id: 'shower-now', value: formatPrice(showerNow) },
+        { id: 'shower-cheap', value: formatPrice(showerCheap) },
+        { id: 'shower-expensive', value: formatPrice(showerExpensive) },
+        { id: 'bath-now', value: formatPrice(bathNow) },
+        { id: 'bath-cheap', value: formatPrice(bathCheap) },
+        { id: 'bath-expensive', value: formatPrice(bathExpensive) }
+    ];
 
-    document.getElementById('bath-now').textContent = formatPrice(bathNow);
-    document.getElementById('bath-cheap').textContent = formatPrice(bathCheap);
-    document.getElementById('bath-expensive').textContent = formatPrice(bathExpensive);
+    priceElements.forEach((item, index) => {
+        const element = document.getElementById(item.id);
+        if (element) {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(10px)';
+            setTimeout(() => {
+                element.textContent = item.value;
+                element.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                element.style.opacity = '1';
+                element.style.transform = 'translateY(0)';
+            }, index * 50);
+        }
+    });
 
     // Format time from time_start (e.g., "2024-01-15T14:00:00+01:00" -> "14:00")
     function formatTime(timeStart) {
@@ -149,20 +164,36 @@ function updateUI(prices) {
         return `${hours}:${minutes}`;
     }
 
-    // Update badges
+    // Update badges with animation
     const badgeClass = getBadgeClass(currentPrice.SEK_per_kWh, minPrice, maxPrice);
     const badgesHTML = `
-        <div class="badge ${badgeClass}">
+        <div class="badge ${badgeClass}" style="opacity: 0; transform: scale(0.9); animation: fadeInScale 0.4s ease-out 0.1s forwards;">
             Just nu: ${badgeClass === 'cheap' ? 'Billigt' : badgeClass === 'expensive' ? 'Dyrt' : 'Normalt'}
         </div>
-        <div class="badge cheap">
+        <div class="badge cheap" style="opacity: 0; transform: scale(0.9); animation: fadeInScale 0.4s ease-out 0.2s forwards;">
             Billigast: ${formatTime(prices[minIndex].time_start)}
         </div>
-        <div class="badge expensive">
+        <div class="badge expensive" style="opacity: 0; transform: scale(0.9); animation: fadeInScale 0.4s ease-out 0.3s forwards;">
             Dyrast: ${formatTime(prices[maxIndex].time_start)}
         </div>
     `;
-    document.getElementById('price-badges').innerHTML = badgesHTML;
+    const badgesContainer = document.getElementById('price-badges');
+    badgesContainer.innerHTML = badgesHTML;
+    
+    // Add animation keyframes if not already present
+    if (!document.getElementById('badge-animations')) {
+        const style = document.createElement('style');
+        style.id = 'badge-animations';
+        style.textContent = `
+            @keyframes fadeInScale {
+                to {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
 }
 
 // Show status message
