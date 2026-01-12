@@ -293,6 +293,62 @@ main {
     border-left: 4px solid #ef4444;
 }
 
+/* Skeleton loader */
+.skeleton {
+    display: inline-block;
+    height: 1.2em;
+    width: 80px;
+    background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+    background-size: 200% 100%;
+    border-radius: 4px;
+    animation: shimmer 1.5s infinite;
+    vertical-align: middle;
+}
+
+.skeleton.price-large {
+    width: 120px;
+    height: 2.5rem;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* Retry button */
+.retry-btn {
+    margin-top: 0.75rem;
+    padding: 0.625rem 1.25rem;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: var(--shadow-md);
+}
+
+.retry-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.retry-btn:active {
+    transform: translateY(0);
+}
+
+.retry-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
 /* Price badges */
 .price-badges {
     display: grid;

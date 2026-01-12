@@ -5,7 +5,8 @@ const CONSTANTS = {
     BATH_LITERS: 160,
     WATER_COST_PER_CUBIC_METER: 30, // kr/m³
     DEFAULT_AREA: 'SE4',
-    STORAGE_KEY: 'vadkostarbadet_area'
+    STORAGE_KEY: 'vadkostarbadet_area',
+    PRICES_CACHE_KEY_PREFIX: 'vadkostarbadet_prices_'
 };
 
 // Get stored area or use default
@@ -28,6 +29,15 @@ function getTodayDate() {
     return `${year}/${month}-${day}`;
 }
 
+// Get today's date in format YYYY-MM-DD (for cache key)
+function getTodayDateKey() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
 // Get current hour (0-23) in Europe/Stockholm timezone
 function getCurrentHour() {
     const now = new Date();
@@ -39,8 +49,8 @@ function getCurrentHour() {
     return parseInt(stockholmTime.find(part => part.type === 'hour').value);
 }
 
-// Fetch electricity prices
-async function fetchPrices(area) {
+// Fetch electricity prices with retry logic
+async function fetchPrices(area, retryCount = 0) {
     const date = getTodayDate();
     const url = `https://www.elprisetjustnu.se/api/v1/prices/${date}_${area}.json`;
     
@@ -50,11 +60,43 @@ async function fetchPrices(area) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
+        
+        // Cache the prices
+        const cacheKey = `${CONSTANTS.PRICES_CACHE_KEY_PREFIX}${area}_${getTodayDateKey()}`;
+        localStorage.setItem(cacheKey, JSON.stringify({
+            data: data,
+            timestamp: Date.now()
+        }));
+        
         return data;
     } catch (error) {
         console.error('Error fetching prices:', error);
+        
+        // Retry up to 2 times (total 3 attempts)
+        if (retryCount < 2) {
+            const delay = retryCount === 0 ? 400 : 800;
+            await new Promise(resolve => setTimeout(resolve, delay));
+            return fetchPrices(area, retryCount + 1);
+        }
+        
         throw error;
     }
+}
+
+// Get cached prices for today
+function getCachedPrices(area) {
+    const cacheKey = `${CONSTANTS.PRICES_CACHE_KEY_PREFIX}${area}_${getTodayDateKey()}`;
+    const cached = localStorage.getItem(cacheKey);
+    if (cached) {
+        try {
+            const parsed = JSON.parse(cached);
+            return parsed.data;
+        } catch (e) {
+            console.error('Error parsing cached prices:', e);
+            return null;
+        }
+    }
+    return null;
 }
 
 // Calculate water cost for bath (160 liters = 0.16 m³)
@@ -159,40 +201,76 @@ function showStatus(message, type) {
     statusEl.className = `status ${type}`;
 }
 
-// Show error with styled alert
-function showError(message) {
+// Show error with styled alert and retry button
+function showError(message, currentArea = null) {
     const statusEl = document.getElementById('status');
     if (!statusEl) return;
+    
+    let retryButton = '';
+    if (currentArea) {
+        retryButton = `<button class="retry-btn" onclick="retryLoadPrices('${currentArea}')">Försök igen</button>`;
+    }
+    
     statusEl.innerHTML = `
         <div class="alert alert-error">
             <strong>Fel:</strong> ${message}
+            ${retryButton}
         </div>
     `;
     statusEl.className = 'status error';
 }
 
+// Retry loading prices (make it globally accessible)
+window.retryLoadPrices = function(area) {
+    loadPrices(area, false); // Don't use cache on retry
+};
+
 // Show loading with skeleton
 function showLoading() {
-    showStatus('Hämtar elpriser...', 'loading');
-    // Show loading skeleton in cards
-    showCardSkeleton();
+    showStatus('Hämtar elpriser…', 'loading');
+    setSkeletonAll();
+    setControlsEnabled(false);
 }
 
-// Show card skeleton while loading
-function showCardSkeleton() {
-    const cards = document.querySelectorAll('.dashboard-card .price-large');
-    cards.forEach(card => {
-        card.textContent = '...';
-        card.style.opacity = '0.5';
+// Set skeleton on a specific element
+function setSkeleton(id) {
+    const el = document.getElementById(id);
+    if (el) {
+        const isLarge = el.classList.contains('price-large');
+        const skeletonClass = isLarge ? 'skeleton price-large' : 'skeleton';
+        el.innerHTML = `<span class="${skeletonClass}"></span>`;
+    }
+}
+
+// Set skeleton on all price elements
+function setSkeletonAll() {
+    const priceElements = [
+        'shower-now', 'shower-cheap', 'shower-expensive',
+        'bath-now', 'bath-cheap', 'bath-expensive'
+    ];
+    priceElements.forEach(id => setSkeleton(id));
+    
+    // Also set skeleton for time elements
+    const timeElements = ['shower-cheap-time', 'shower-expensive-time', 'bath-cheap-time', 'bath-expensive-time'];
+    timeElements.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.innerHTML = `<span class="skeleton" style="width: 50px;"></span>`;
+        }
     });
 }
 
-// Hide card skeleton
-function hideCardSkeleton() {
-    const cards = document.querySelectorAll('.dashboard-card .price-large');
-    cards.forEach(card => {
-        card.style.opacity = '1';
-    });
+// Enable/disable controls
+function setControlsEnabled(enabled) {
+    const areaSelect = document.getElementById('area-select');
+    const detectBtn = document.getElementById('detect-area-btn');
+    
+    if (areaSelect) {
+        areaSelect.disabled = !enabled;
+    }
+    if (detectBtn) {
+        detectBtn.disabled = !enabled;
+    }
 }
 
 // Hide status
@@ -219,7 +297,7 @@ function updateDashboardCard(type, now, cheap, expensive, cheapTime, expensiveTi
     if (nowEl) {
         nowEl.style.opacity = '0';
         setTimeout(() => {
-            nowEl.textContent = formatPrice(now);
+            nowEl.innerHTML = formatPrice(now);
             nowEl.style.transition = 'opacity 0.3s ease';
             nowEl.style.opacity = '1';
         }, 100);
@@ -239,16 +317,16 @@ function updateDashboardCard(type, now, cheap, expensive, cheapTime, expensiveTi
     const expensiveTimeEl = document.getElementById(`${type}-expensive-time`);
     
     if (cheapEl) {
-        cheapEl.textContent = formatPrice(cheap);
+        cheapEl.innerHTML = formatPrice(cheap);
         if (cheapTimeEl) {
-            cheapTimeEl.textContent = `(${formatTime(cheapTime)})`;
+            cheapTimeEl.innerHTML = `(${formatTime(cheapTime)})`;
         }
     }
     
     if (expensiveEl) {
-        expensiveEl.textContent = formatPrice(expensive);
+        expensiveEl.innerHTML = formatPrice(expensive);
         if (expensiveTimeEl) {
-            expensiveTimeEl.textContent = `(${formatTime(expensiveTime)})`;
+            expensiveTimeEl.innerHTML = `(${formatTime(expensiveTime)})`;
         }
     }
 }
@@ -584,8 +662,8 @@ function detectElområde() {
             // Hide current status (loadPrices will show its own loading message)
             hideStatus();
             
-            // Load prices for detected area
-            loadPrices(detectedArea);
+            // Load prices for detected area (don't use cache for new detection)
+            loadPrices(detectedArea, false);
         },
         (error) => {
             // Error handling
@@ -618,16 +696,68 @@ function detectElområde() {
 }
 
 // Load and display prices
-async function loadPrices(area) {
+async function loadPrices(area, useCache = true) {
+    // Check cache first if allowed
+    if (useCache) {
+        const cachedPrices = getCachedPrices(area);
+        if (cachedPrices) {
+            // Render from cache immediately (no skeleton)
+            updateUI(cachedPrices);
+            setControlsEnabled(true);
+            
+            // Then refresh in background
+            try {
+                const prices = await fetchPrices(area);
+                updateUI(prices);
+            } catch (error) {
+                // If refresh fails, show warning but keep cached values
+                showStatus('Visar sparade priser (kan vara inaktuella).', 'loading');
+                setTimeout(() => hideStatus(), 3000);
+                console.error('Error refreshing prices:', error);
+            }
+            return;
+        }
+    }
+    
+    // No cache available, show loading skeleton
     showLoading();
+    
     try {
         const prices = await fetchPrices(area);
         hideStatus();
-        hideCardSkeleton();
+        setControlsEnabled(true);
         updateUI(prices);
     } catch (error) {
-        hideCardSkeleton();
-        showError('Kunde inte hämta elpriser. Försök igen senare.');
+        hideStatus();
+        setControlsEnabled(true);
+        
+        // Check if we have cached data as fallback
+        const cachedPrices = getCachedPrices(area);
+        if (cachedPrices) {
+            updateUI(cachedPrices);
+            showStatus('Visar sparade priser (kan vara inaktuella).', 'loading');
+            setTimeout(() => hideStatus(), 3000);
+        } else {
+            // No cache, show error with placeholder values
+            const priceElements = [
+                'shower-now', 'shower-cheap', 'shower-expensive',
+                'bath-now', 'bath-cheap', 'bath-expensive'
+            ];
+            priceElements.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.textContent = '—';
+                }
+            });
+            const timeElements = ['shower-cheap-time', 'shower-expensive-time', 'bath-cheap-time', 'bath-expensive-time'];
+            timeElements.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.textContent = '';
+                }
+            });
+            showError('Kunde inte hämta elpriser. Försök igen senare.', area);
+        }
         console.error(error);
     }
 }
