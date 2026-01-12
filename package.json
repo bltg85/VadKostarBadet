@@ -1,0 +1,12 @@
+{
+  "name": "vadkostarbadet",
+  "version": "1.0.0",
+  "description": "Vad Kostar Badet - Elprisberäkning för dusch och bad",
+  "scripts": {
+    "start": "http-server -p 8000 -o",
+    "serve": "http-server -p 8000"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

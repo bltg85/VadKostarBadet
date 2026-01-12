@@ -37,7 +37,29 @@ Sidor (för AdSense):
 
 För att testa ändringar lokalt innan du pushar till GitHub:
 
-### Metod 1: Python (enklast)
+### Metod 1: Använd start-script (enklast på Windows)
+Dubbelklicka på `start-local.bat` eller kör i PowerShell:
+```powershell
+.\start-local.ps1
+```
+Detta kommer automatiskt att:
+- Försöka använda Python om det finns
+- Annars försöka använda Node.js med http-server
+- Öppna http://localhost:8000 i webbläsaren
+
+### Metod 2: Node.js med npm (rekommenderat)
+```bash
+# Installera dependencies (första gången)
+npm install
+
+# Starta servern (öppnar automatiskt i webbläsaren)
+npm start
+
+# Eller utan att öppna webbläsaren automatiskt
+npm run serve
+```
+
+### Metod 3: Python
 ```bash
 # Python 3
 cd VadKostarBadet
@@ -47,20 +69,7 @@ python -m http.server 8000
 # http://localhost:8000
 ```
 
-### Metod 2: Node.js
-```bash
-# Installera http-server globalt (en gång)
-npm install -g http-server
-
-# Kör servern
-cd VadKostarBadet
-http-server -p 8000
-
-# Öppna sedan i webbläsaren:
-# http://localhost:8000
-```
-
-### Metod 3: VS Code Live Server
+### Metod 4: VS Code Live Server
 1. Installera "Live Server" extension i VS Code
 2. Högerklicka på `index.html`
 3. Välj "Open with Live Server"
