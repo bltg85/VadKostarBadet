@@ -13,12 +13,13 @@ try {
             # Simple string replacement - find the meta tag and replace content value
             $content = $content -replace '(name="git-commit"\s+content=")[^"]*(")', "`$1$commitHash`$2"
             Set-Content $file -Value $content -Encoding UTF8 -NoNewline
-            Write-Host "  ✓ Updated $file" -ForegroundColor Green
+            Write-Host "  Updated $file" -ForegroundColor Green
         }
     }
 
-    Write-Host "`nVersion update complete! Don't forget to commit the changes." -ForegroundColor Green
+    Write-Host ""
+    Write-Host "Version update complete! Don't forget to commit the changes." -ForegroundColor Green
 } catch {
     Write-Host "Error: $_" -ForegroundColor Red
-    Write-Host "Make sure you're in a git repository and have at least one commit." -ForegroundColor Yellow
+    Write-Host "Make sure you are in a git repository and have at least one commit." -ForegroundColor Yellow
 }
