@@ -139,7 +139,7 @@ function updateUI(prices) {
     // Update insights
     updateInsights(showerNow, showerCheap, bathNow, bathCheap, minPrice, maxPrice);
 
-    // Format time from time_start (e.g., "2024-01-15T14:00:00+01:00" -> "14:00")
+    // Format time from time_start (e.g., "2025-01-15T14:00:00+01:00" -> "14:00")
     function formatTime(timeStart) {
         const date = new Date(timeStart);
         const hours = String(date.getHours()).padStart(2, '0');
