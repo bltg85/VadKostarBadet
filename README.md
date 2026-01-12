@@ -83,3 +83,26 @@ python -m http.server 8000
 Versionen visas i footern på varje sida. Den visar antingen:
 - Git commit hash (första 7 tecknen) om det finns
 - Version + datum som fallback
+
+### Uppdatera version automatiskt
+
+**Rekommenderat:** Kör detta innan varje commit/push:
+```powershell
+.\update-version-simple.ps1
+```
+
+Detta uppdaterar meta-taggen i alla HTML-filer med senaste commit hash. Efter att ha kört scriptet, commita ändringarna tillsammans med dina andra ändringar.
+
+**Alternativ:**
+```bash
+# Med Node.js (om installerat)
+npm run update-version
+
+# Eller med PowerShell (Windows)
+.\update-version.ps1
+
+# Eller med batch-fil (Windows)
+.\update-version.bat
+```
+
+**Tips:** Du kan lägga till `.\update-version-simple.ps1` i din commit-workflow så att versionen alltid är uppdaterad.
