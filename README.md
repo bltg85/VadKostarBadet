@@ -17,7 +17,7 @@ Beräkningar:
 - Bad (default): 160 liter, 8 kWh
 - Vatten+avlopp (default): 30 kr/m³
 - Visa:
-  1) “Just nu” pris (aktuella timmen)
+  1) "Just nu" pris (aktuella timmen)
   2) Billigaste timmen idag
   3) Dyraste timmen idag
   4) Snittpris idag (valfritt)
@@ -32,3 +32,45 @@ Sidor (för AdSense):
 - /integritetspolicy
 - /om
 - /kontakt
+
+## Lokal utveckling
+
+För att testa ändringar lokalt innan du pushar till GitHub:
+
+### Metod 1: Python (enklast)
+```bash
+# Python 3
+cd VadKostarBadet
+python -m http.server 8000
+
+# Öppna sedan i webbläsaren:
+# http://localhost:8000
+```
+
+### Metod 2: Node.js
+```bash
+# Installera http-server globalt (en gång)
+npm install -g http-server
+
+# Kör servern
+cd VadKostarBadet
+http-server -p 8000
+
+# Öppna sedan i webbläsaren:
+# http://localhost:8000
+```
+
+### Metod 3: VS Code Live Server
+1. Installera "Live Server" extension i VS Code
+2. Högerklicka på `index.html`
+3. Välj "Open with Live Server"
+
+**Viktigt:** Du måste använda en lokal webbserver (inte bara öppna filen direkt) eftersom:
+- Geolocation API kräver HTTPS eller localhost
+- Fetch API kan ha CORS-problem om filen öppnas direkt
+
+## Versionshantering
+
+Versionen visas i footern på varje sida. Den visar antingen:
+- Git commit hash (första 7 tecknen) om det finns
+- Version + datum som fallback

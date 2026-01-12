@@ -561,6 +561,18 @@ footer p:last-child {
     margin-bottom: 0;
 }
 
+.version-info {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: var(--text-lighter);
+    font-family: 'Courier New', monospace;
+}
+
+.version-info #version {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
     .container {

@@ -349,4 +349,19 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         console.error('Detect button not found in DOM');
     }
+
+    // Set version number (using commit hash if available, otherwise version number)
+    const versionEl = document.getElementById('version');
+    if (versionEl) {
+        // Try to get commit hash from meta tag or use version number
+        const commitHash = document.querySelector('meta[name="git-commit"]')?.content;
+        if (commitHash) {
+            versionEl.textContent = commitHash.substring(0, 7);
+            versionEl.title = `Commit: ${commitHash}`;
+        } else {
+            // Fallback to version number with timestamp
+            const buildTime = new Date().toISOString().split('T')[0];
+            versionEl.textContent = `1.0.0-${buildTime}`;
+        }
+    }
 });
