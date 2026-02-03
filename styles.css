@@ -765,11 +765,86 @@ main {
     text-decoration: underline;
 }
 
+/* Article list with thumbnails */
+.article-list-with-thumbs .article-list-link {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    text-decoration: none;
+    color: inherit;
+}
+
+.article-list-with-thumbs .article-list-link:hover {
+    color: var(--primary-color);
+}
+
+.article-list-with-thumbs .article-thumb {
+    flex-shrink: 0;
+    width: 240px;
+    height: 160px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border-light);
+    background: var(--bg-light);
+}
+
+.article-list-with-thumbs .article-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.article-list-with-thumbs .article-list-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.article-list-with-thumbs .article-list-text strong {
+    color: var(--text-color);
+}
+
+.article-list-with-thumbs .article-list-link:hover .article-list-text strong {
+    color: var(--primary-color);
+}
+
+@media (max-width: 600px) {
+    .article-list-with-thumbs .article-list-link {
+        flex-direction: column;
+    }
+    .article-list-with-thumbs .article-thumb {
+        width: 100%;
+        height: 180px;
+    }
+}
+
 .article-meta {
     display: block;
     margin-top: 0.35rem;
     font-size: 0.9rem;
     color: var(--text-light);
+}
+
+.article-figure {
+    margin: 1.5rem 0;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-light);
+}
+
+.article-figure img {
+    width: 100%;
+    height: auto;
+    display: block;
+    vertical-align: middle;
+}
+
+.article-figure figcaption {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    color: var(--text-light);
+    background: var(--bg-light);
 }
 
 .info-box h2 {
