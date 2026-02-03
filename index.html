@@ -1,11 +1,11 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="sv">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vad Kostar Badet? – Elprisberäkning för dusch och bad</title>
     <meta name="description" content="Se vad det kostar att duscha och bada just nu baserat på aktuella elpriser. Beräkna kostnaden för ditt elområde.">
-    <meta name="git-commit" content="05326ed">
+    <meta name="git-commit" content="1ffa0c3">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
     <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/favicon-192.png">
     <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
@@ -24,21 +24,26 @@
             <div class="container">
                 <a href="index.html" class="logo">VadKostarBadet.se</a>
                 <ul class="nav-links">
-                    <li><a href="index.html">Hem</a></li>
+                    <li><a href="index.html">Kalkylator</a></li>
+                    <li><a href="artiklar/index.html">Artiklar</a></li>
                     <li><a href="om.html">Om</a></li>
                     <li><a href="kontakt.html">Kontakt</a></li>
-                    <li><a href="integritetspolicy.html">Integritetspolicy</a></li>
+                    <li><a href="integritet.html">Integritet</a></li>
                 </ul>
             </div>
         </nav>
     </header>
 
     <main class="container">
-        <!-- Hero Section -->
-        <section class="hero">
+        <!-- Intro text above calculator -->
+        <section class="calculator-intro">
             <h1>Vad kostar badet just nu?</h1>
-            <p class="hero-intro">Se vad det kostar att duscha och bada baserat på aktuella elpriser i ditt elområde.</p>
-            
+            <p class="hero-intro">Kalkylatorn nedan visar uppskattade kostnader för <strong>ett bad</strong> och <strong>en dusch på 10 minuter</strong> baserat på aktuella timpriser för el i ditt elområde. Du ser kostnaden just nu samt billigaste och dyraste timmen idag.</p>
+            <p class="hero-intro">Verktyget är till för dig som vill få en bild av storleksordningen och hur priset varierar över dagen – till exempel för att planera när du duschar eller bada. Välj elområde (SE1–SE4) nedan; du kan också använda knappen för att gissa ditt område utifrån din plats.</p>
+        </section>
+
+        <!-- Hero Section / Calculator -->
+        <section class="hero">
             <div class="area-selector">
                 <label for="area-select">Elområde:</label>
                 <div class="area-selector-row">
@@ -137,15 +142,26 @@
                 <li>Elpriset är timpris per kWh från elprisetjustnu.se</li>
             </ul>
         </div>
+
+        <div class="info-box calculator-below">
+            <h3>Hur ska resultatet tolkas?</h3>
+            <p>Siffrorna är <strong>uppskattningar</strong> för en typisk dusch respektive ett typiskt bad. Din verkliga förbrukning kan vara högre eller lägre beroende på duschmunstycke, vattentemperatur och hur länge du står i duschen. Använd resultatet för att se storleksordning och variation över dagen – inte som exakt fakturabelopp.</p>
+            <h3>Vanliga missförstånd</h3>
+            <p>Kalkylatorn visar bara kostnad för <em>den timme</em> du väljer (eller "just nu"). Om du duschar över två timmar räknas bara elförbrukningen för den aktuella timmens pris. Det som visas inkluderar el och en uppskattning för vatten/avlopp till badet; eventuella nätavgifter, abonnemang eller skatter är inte inräknade i den visade kronan.</p>
+            <h3>Vad som inte ingår</h3>
+            <p>Beräkningen inkluderar inte: fasta avgifter till elnätsbolag eller elleverantör, moms på el, eller skillnader mellan olika elavtal. Pool, badtunna och värmepump för varmvatten är inte inräknade – för sådant behöver du andra kalkyler. Vi har skrivit <a href="artiklar/index.html">artiklar</a> om badtunna, pool och elkostnader om du vill läsa mer.</p>
+            <h3>Tips för att sänka kostnaden</h3>
+            <p>Om du har rörligt elpris kan du ofta sänka kostnaden genom att duscha eller bada när timpriset är lägre (t.ex. på natten eller under perioder med låg last). Korta duschar och lägre flöde minskar både el och vattenförbrukning. Grafen ovan visar när det är billigast och dyrast idag i ditt område.</p>
+        </div>
     </main>
 
     <footer>
         <div class="container">
             <p>&copy; 2026 VadKostarBadet.se</p>
             <p>
-                <a href="om.html">Om</a> | 
-                <a href="kontakt.html">Kontakt</a> | 
-                <a href="integritetspolicy.html">Integritetspolicy</a>
+                <a href="om.html">Om</a> |
+                <a href="kontakt.html">Kontakt</a> |
+                <a href="integritet.html">Integritet</a>
             </p>
             <p class="version-info">Version <span id="version">1.0.0</span></p>
         </div>

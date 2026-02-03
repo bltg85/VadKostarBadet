@@ -1,17 +1,16 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="sv">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Om – VadKostarBadet.se</title>
-    <meta name="description" content="Läs mer om VadKostarBadet.se och hur vi beräknar kostnaderna för dusch och bad.">
-    <meta name="git-commit" content="05326ed">
+    <meta name="description" content="Läs mer om VadKostarBadet.se: vad sajten är, vem den är för och varför den finns. Transparent informationssajt om kostnader för bad och dusch.">
+    <meta name="git-commit" content="1ffa0c3">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
     <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/favicon-192.png">
     <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
     <link rel="manifest" href="site.webmanifest">
     <link rel="stylesheet" href="styles.css">
-    <!-- Google AdSense verification script -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8497685477353382"
             crossorigin="anonymous"></script>
 </head>
@@ -21,10 +20,11 @@
             <div class="container">
                 <a href="index.html" class="logo">VadKostarBadet.se</a>
                 <ul class="nav-links">
-                    <li><a href="index.html">Hem</a></li>
+                    <li><a href="index.html">Kalkylator</a></li>
+                    <li><a href="artiklar/index.html">Artiklar</a></li>
                     <li><a href="om.html">Om</a></li>
                     <li><a href="kontakt.html">Kontakt</a></li>
-                    <li><a href="integritetspolicy.html">Integritetspolicy</a></li>
+                    <li><a href="integritet.html">Integritet</a></li>
                 </ul>
             </div>
         </nav>
@@ -33,34 +33,28 @@
     <main class="container">
         <h1>Om VadKostarBadet.se</h1>
         
-        <div class="info-box">
+        <article class="info-box page-content">
             <h2>Vad är VadKostarBadet.se?</h2>
-            <p>VadKostarBadet.se är en enkel och tydlig tjänst som hjälper dig att se vad det kostar att duscha och bada just nu baserat på aktuella elpriser. Vi använder timpriser från elprisetjustnu.se för att ge dig en korrekt kostnadsbild.</p>
+            <p>VadKostarBadet.se är en fristående informationssajt som hjälper användare i Sverige att förstå vad det kan kosta att duscha och bada utifrån aktuella elpriser. Sajten erbjuder en enkel kalkylator som visar kostnadsuppskattningar för dusch och bad baserat på timpriser i ditt elområde, samt artiklar som förklarar vad som påverkar kostnaderna.</p>
 
-            <h2>Hur fungerar det?</h2>
-            <p>Vi hämtar aktuella timpriser för el för ditt valda elområde och beräknar kostnaden baserat på standardförbrukning för dusch och bad. Du kan se kostnaden för den aktuella timmen samt jämföra med billigaste och dyraste timmen under dagen.</p>
+            <h2>Vem är sajten för?</h2>
+            <p>Sajten riktar sig till privatpersoner som vill ha en tydlig bild av vad det kostar att använda varmvatten hemma – antingen för att planera när man ska duscha eller bada, eller för att förstå hur elpriser och förbrukning påverkar kostnaden. Vi skriver på svenska och använder svenska kronor och svenska elområden (SE1–SE4).</p>
 
-            <h2>Beräkningar</h2>
-            <ul>
-                <li><strong>Dusch:</strong> 10 minuter med en förbrukning på 6 kWh</li>
-                <li><strong>Bad:</strong> 160 liter vatten med en förbrukning på 8 kWh</li>
-                <li><strong>Vatten + avlopp:</strong> 30 kr per kubikmeter (0,16 m³ = 4,80 kr för ett bad)</li>
-            </ul>
+            <h2>Varför finns sajten?</h2>
+            <p>Elpriserna har blivit mer varierande över dygnet, och många undrar vad det egentligen kostar att ta ett bad eller en längre dusch. Genom att koppla ihop aktuella timpriser med typiska förbrukningar vill vi göra det enklare att förstå kostnadsbilden. Sajten är ett verktyg för information, inte en tjänst som ger garantier eller rådgivning.</p>
 
-            <h2>Data</h2>
-            <p>Elpriserna hämtas från <a href="https://www.elprisetjustnu.se" target="_blank" rel="noopener">elprisetjustnu.se</a> och uppdateras automatiskt. Vi sparar ditt val av elområde i din webbläsare (localStorage) för att komma ihåg dina preferenser.</p>
+            <h2>Transparens</h2>
+            <p>VadKostarBadet.se drivs som en fristående webbplats. Vi ger inga garantier för att de visade siffrorna exakt motsvarar din faktura; beräkningarna bygger på genomsnittliga antaganden om vattenmängd och elförbrukning. Elprisdata hämtas från externa källor (t.ex. elprisetjustnu.se) och kan variera. Vi rekommenderar att du använder sajten som underlag för att förstå storleksordningar och variationer, inte som exakt fakturaberäkning.</p>
 
-            <h2>Elområden</h2>
-            <ul>
-                <li><strong>SE1:</strong> Norra Sverige</li>
-                <li><strong>SE2:</strong> Norra Mellansverige</li>
-                <li><strong>SE3:</strong> Södra Mellansverige</li>
-                <li><strong>SE4:</strong> Södra Sverige/Skåne</li>
-            </ul>
-        </div>
+            <h2>Fokus på att hjälpa användare förstå kostnader</h2>
+            <p>Allt innehåll på sajten – både kalkylatorn och artiklarna – är skrivet för att hjälpa dig förstå vad som driver kostnaderna för bad och dusch: elpris, säsong, isolering, användningsmönster och skillnader mellan t.ex. pool och badtunna. Vi strävar efter neutral, saklig information utan överdrifter eller juridiska varningar. Om du har frågor eller synpunkter kan du nå oss via <a href="kontakt.html">kontaktsidan</a>.</p>
+
+            <h2>Teknisk information</h2>
+            <p>Beräkningarna bygger på antaganden som dusch (t.ex. 10 minuter, 6 kWh) och bad (t.ex. 160 liter, 8 kWh), samt en uppskattning för vatten och avlopp. Dina val sparas lokalt i webbläsaren (localStorage) så att vi inte behöver spara personuppgifter. Mer om vilken data vi använder finns på vår <a href="integritet.html">integritetssida</a>.</p>
+        </article>
 
         <div style="margin-top: 2rem; text-align: center;">
-            <a href="index.html" class="button-link">Tillbaka till startsidan</a>
+            <a href="index.html" class="button-link">Till kalkylatorn</a>
         </div>
     </main>
 
@@ -68,9 +62,9 @@
         <div class="container">
             <p>&copy; 2026 VadKostarBadet.se</p>
             <p>
-                <a href="om.html">Om</a> | 
-                <a href="kontakt.html">Kontakt</a> | 
-                <a href="integritetspolicy.html">Integritetspolicy</a>
+                <a href="om.html">Om</a> |
+                <a href="kontakt.html">Kontakt</a> |
+                <a href="integritet.html">Integritet</a>
             </p>
             <p class="version-info">Version <span id="version">1.0.0</span></p>
         </div>

@@ -123,6 +123,15 @@ main {
     padding: 3rem 0;
 }
 
+/* Calculator intro (above calculator) */
+.calculator-intro {
+    margin-bottom: 2rem;
+}
+
+.calculator-intro .hero-intro + .hero-intro {
+    margin-top: 1rem;
+}
+
 /* Hero Section */
 .hero {
     margin-bottom: 3rem;
@@ -688,6 +697,81 @@ main {
     font-weight: 600;
 }
 
+/* Article and page content */
+.page-content {
+    max-width: 720px;
+}
+
+.page-content h2 {
+    margin-top: 1.75rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-color);
+    font-size: 1.25rem;
+}
+
+.page-content h2:first-of-type {
+    margin-top: 1rem;
+}
+
+.page-content p {
+    margin-bottom: 1rem;
+    color: var(--text-color);
+    line-height: 1.7;
+}
+
+.article-back {
+    margin-bottom: 1rem;
+}
+
+.article-back a {
+    color: var(--text-light);
+    text-decoration: none;
+    font-size: 0.9375rem;
+}
+
+.article-back a:hover {
+    color: var(--primary-color);
+}
+
+.article-lead {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.article-list {
+    list-style: none;
+    margin: 1.5rem 0;
+}
+
+.article-list li {
+    margin-bottom: 1.5rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.article-list li:last-child {
+    border-bottom: none;
+}
+
+.article-list a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.article-list a:hover {
+    text-decoration: underline;
+}
+
+.article-meta {
+    display: block;
+    margin-top: 0.35rem;
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
 .info-box h2 {
     margin-top: 1.5rem;
     margin-bottom: 0.75rem;
@@ -696,6 +780,19 @@ main {
 }
 
 .info-box h2:first-child {
+    margin-top: 0;
+}
+
+.info-box.calculator-below p {
+    margin-bottom: 1rem;
+    line-height: 1.7;
+}
+
+.info-box.calculator-below h3 {
+    margin-top: 1.5rem;
+}
+
+.info-box.calculator-below h3:first-child {
     margin-top: 0;
 }
 
