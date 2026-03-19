@@ -1,15 +1,18 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="sv">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Om – VadKostarBadet.se</title>
-    <meta name="description" content="Läs mer om VadKostarBadet.se: vad sajten är, vem den är för och varför den finns. Transparent informationssajt om kostnader för bad och dusch.">
-    <meta name="git-commit" content="7e7a572">
+    <title>Om VadKostarBadet.se – Vem ligger bakom sajten?</title>
+    <meta name="description" content="VadKostarBadet.se byggdes av en privatperson som ville förstå vad det faktiskt kostar att duscha och bada. Läs om bakgrunden och syftet med sajten.">
+    <meta name="git-commit" content="34077fd">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
     <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/favicon-192.png">
     <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
     <link rel="manifest" href="site.webmanifest">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8497685477353382"
             crossorigin="anonymous"></script>
@@ -32,25 +35,30 @@
 
     <main class="container">
         <h1>Om VadKostarBadet.se</h1>
-        
+
         <article class="info-box page-content">
-            <h2>Vad är VadKostarBadet.se?</h2>
-            <p>VadKostarBadet.se är en fristående informationssajt som hjälper användare i Sverige att förstå vad det kan kosta att duscha och bada utifrån aktuella elpriser. Sajten erbjuder en enkel kalkylator som visar kostnadsuppskattningar för dusch och bad baserat på timpriser i ditt elområde, samt artiklar som förklarar vad som påverkar kostnaderna.</p>
+            <h2>Bakgrunden – en enkel fråga utan bra svar</h2>
+            <p>Sajten startades av en privatperson som helt enkelt undrade: <em>vad kostar det egentligen att ta ett bad?</em> Det låter som en enkel fråga, men svaret var förvånansvärt svårt att hitta. Kalkylatorer för elförbrukning hittades, men de tog inte hänsyn till att elpriset faktiskt varierar timme för timme – ibland med en faktor tre under samma dag.</p>
+            <p>Tanken var ursprungligen enkel: bygg ett verktyg som kopplar ihop aktuella timpriser med typiska förbrukningar för dusch och bad, så att man kan se vad det kostar "just nu" i sitt eget elområde. Verktyget publicerades, och efterhand kom insikten att det fanns fler frågor av samma typ som förtjänade lika tydliga svar – vad kostar bastun? Tvättmaskinen? Golvvärmen?</p>
 
-            <h2>Vem är sajten för?</h2>
-            <p>Sajten riktar sig till privatpersoner som vill ha en tydlig bild av vad det kostar att använda varmvatten hemma – antingen för att planera när man ska duscha eller bada, eller för att förstå hur elpriser och förbrukning påverkar kostnaden. Vi skriver på svenska och använder svenska kronor och svenska elområden (SE1–SE4).</p>
+            <h2>Vem driver sajten?</h2>
+            <p>VadKostarBadet.se drivs av en privatperson med intresse för teknik och privatekonomi. Det är ingen organisation och inga redaktörer – det är ett personligt projekt där syftet är att ge faktabaserad, neutral information om elkostnader för vanliga hushållssituationer. Sajten har inget samarbete med elbolag, tillverkare eller andra aktörer som skulle kunna påverka innehållet.</p>
+            <p>Har du synpunkter, hittar du ett fel eller vill du ställa en fråga är du varmt välkommen att höra av dig via <a href="kontakt.html">kontaktsidan</a>.</p>
 
-            <h2>Varför finns sajten?</h2>
-            <p>Elpriserna har blivit mer varierande över dygnet, och många undrar vad det egentligen kostar att ta ett bad eller en längre dusch. Genom att koppla ihop aktuella timpriser med typiska förbrukningar vill vi göra det enklare att förstå kostnadsbilden. Sajten är ett verktyg för information, inte en tjänst som ger garantier eller rådgivning.</p>
+            <h2>Vad är sajten?</h2>
+            <p>VadKostarBadet.se är ett kombinerat verktyg och informationssajt med tre delar:</p>
+            <ul>
+                <li><strong>Kalkylatorn</strong> – visar vad en dusch eller ett bad kostar i din aktuella timme, baserat på riktiga spotpriser från <em>elprisetjustnu.se</em> per elområde (SE1–SE4). Den visar också billigaste och dyraste timmen idag.</li>
+                <li><strong>Artiklarna</strong> – längre texter om vad som driver elkostnader i hemmet: badtunna, pool, bastu, tvättmaskin, diskmaskin, golvvärme, elbil och mer. Artiklarna är skrivna för att ge en verklig förståelse för storleksordningar – inte för att locka klick.</li>
+                <li><strong>Förklaringar</strong> – genomgångar av begrepp som elområden (SE1–SE4), rörligt vs fast elpris och hur timpriset fungerar.</li>
+            </ul>
 
-            <h2>Transparens</h2>
-            <p>VadKostarBadet.se drivs som en fristående webbplats. Vi ger inga garantier för att de visade siffrorna exakt motsvarar din faktura; beräkningarna bygger på genomsnittliga antaganden om vattenmängd och elförbrukning. Elprisdata hämtas från externa källor (t.ex. elprisetjustnu.se) och kan variera. Vi rekommenderar att du använder sajten som underlag för att förstå storleksordningar och variationer, inte som exakt fakturaberäkning.</p>
+            <h2>Transparens kring beräkningarna</h2>
+            <p>Kalkylatorn är ett <strong>uppskattningsverktyg</strong>. Siffrorna bygger på typiska antaganden: en dusch är 10 minuter och 6 kWh, ett bad är 160 liter och 8 kWh, varmvatten kostar 30 kr/m³. Din verkliga förbrukning beror på din varmvattenberedare, ditt duschmunstycke, hur länge duschen faktiskt går och hur varmt du håller vattnet. Det vi visar är ett rättvisande riktmärke för storleksordning – inte vad som faktiskt står på nästa faktura.</p>
+            <p>Elprisdata hämtas från <em>elprisetjustnu.se</em>, ett öppet API för svenska spotpriser. Vi har inget kontrollerat inflytande över den datan och kan inte garantera dess exakthet, men det är den bästa öppna källan för svenska timpriser.</p>
 
-            <h2>Fokus på att hjälpa användare förstå kostnader</h2>
-            <p>Allt innehåll på sajten – både kalkylatorn och artiklarna – är skrivet för att hjälpa dig förstå vad som driver kostnaderna för bad och dusch: elpris, säsong, isolering, användningsmönster och skillnader mellan t.ex. pool och badtunna. Vi strävar efter neutral, saklig information utan överdrifter eller juridiska varningar. Om du har frågor eller synpunkter kan du nå oss via <a href="kontakt.html">kontaktsidan</a>.</p>
-
-            <h2>Teknisk information</h2>
-            <p>Beräkningarna bygger på antaganden som dusch (t.ex. 10 minuter, 6 kWh) och bad (t.ex. 160 liter, 8 kWh), samt en uppskattning för vatten och avlopp. Dina val sparas lokalt i webbläsaren (localStorage) så att vi inte behöver spara personuppgifter. Mer om vilken data vi använder finns på vår <a href="integritet.html">integritetssida</a>.</p>
+            <h2>Integritet och personuppgifter</h2>
+            <p>Sajten sparar inga personuppgifter. Ditt valda elområde lagras lokalt i din webbläsare (localStorage) och lämnar aldrig din enhet. Vi sätter inga spårningscookies. Mer om detta finns i vår <a href="integritet.html">integritetspolicy</a>.</p>
         </article>
 
         <div style="margin-top: 2rem; text-align: center;">

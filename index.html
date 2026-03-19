@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vad Kostar Badet? – Elprisberäkning för dusch och bad</title>
     <meta name="description" content="Se vad det kostar att duscha och bada just nu baserat på aktuella elpriser. Beräkna kostnaden för ditt elområde.">
-    <meta name="git-commit" content="7e7a572">
+    <meta name="git-commit" content="34077fd">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
     <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/favicon-192.png">
     <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
@@ -17,6 +17,54 @@
     <!-- Google AdSense verification script -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8497685477353382"
             crossorigin="anonymous"></script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Vad kostar ett bad i el?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ett typiskt bad på 160 liter och 8 kWh elförbrukning kostar ungefär 8–16 kr beroende på aktuellt elpris i ditt elområde. Vid höga elpriser kan kostnaden bli högre. Kalkylatorn på den här sajten visar kostnaden baserat på aktuella timpriser."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Vad kostar en dusch på 10 minuter?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "En dusch på 10 minuter med typisk förbrukning på 6 kWh kostar ungefär 6–12 kr beroende på elpriset i ditt elområde. Priset varierar kraftigt beroende på om du duschar under en billig eller dyr timme."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Vilket elområde bor jag i?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sverige är uppdelat i fyra elområden: SE1 (norra Sverige), SE2 (norra mellansverige), SE3 (södra mellansverige inklusive Stockholm) och SE4 (södra Sverige inklusive Skåne). Du kan använda 'Gissa mitt elområde'-knappen i kalkylatorn eller titta på din elfaktura för att se vilket område du tillhör."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Är det billigare att duscha på natten?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ja, med rörligt elpris (timspotpris) är elpriset ofta lägst sent på natten eller tidigt på morgonen och kan vara en tredjedel av vad det kostar under morgon- och eftermiddagstoppar. Kalkylatorn visar billigaste och dyraste timmen idag i ditt elområde."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Är bad eller dusch billigast?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "En dusch på 10 minuter förbrukar ungefär 6 kWh och ett bad 8 kWh, så en kort dusch är billigare än ett bad. Skillnaden är dock inte enorm – det är framför allt elpriset vid tidpunkten som avgör totalkostnaden."
+          }
+        }
+      ]
+    }
+    </script>
 </head>
 <body>
     <header>
@@ -143,6 +191,26 @@
             </ul>
         </div>
 
+        <div class="info-box">
+            <h3>Vanliga frågor om bad- och duschkostnad</h3>
+            <dl>
+                <dt><strong>Vad kostar ett bad i el?</strong></dt>
+                <dd>Ett typiskt bad på 160 liter och 8 kWh elförbrukning kostar ungefär 8–16 kr beroende på aktuellt elpris. Kalkylatorn ovan visar kostnaden baserat på timpriser i ditt elområde.</dd>
+
+                <dt style="margin-top:1rem;"><strong>Vad kostar en dusch på 10 minuter?</strong></dt>
+                <dd>Med en typisk förbrukning på 6 kWh kostar duschen ungefär 6–12 kr. Tidpunkten spelar stor roll – elpriset kan variera med en faktor tre under samma dag.</dd>
+
+                <dt style="margin-top:1rem;"><strong>Är det billigare att duscha på natten?</strong></dt>
+                <dd>Ja. Med rörligt elpris är priset ofta lägst sent på natten och tidigt på morgonen. Grafen ovan visar när det är billigast och dyrast att bada idag i ditt elområde.</dd>
+
+                <dt style="margin-top:1rem;"><strong>Är bad eller dusch billigast?</strong></dt>
+                <dd>En 10-minutersdusch förbrukar ungefär 6 kWh, ett bad 8 kWh. Duschen är något billigare, men det är framförallt elpriset vid tidpunkten som gör störst skillnad.</dd>
+
+                <dt style="margin-top:1rem;"><strong>Vilket elområde bor jag i?</strong></dt>
+                <dd>Sverige har fyra elområden: SE1 (norr), SE2 (norra mellansverige), SE3 (södra mellansverige/Stockholm) och SE4 (Skåne och sydligaste Sverige). Titta på elfakturan eller använd "Gissa mitt elområde"-knappen ovan. Läs mer i artikeln <a href="artiklar/elomraden-i-sverige.html">Elområden i Sverige</a>.</dd>
+            </dl>
+        </div>
+
         <div class="info-box calculator-below">
             <h3>Hur ska resultatet tolkas?</h3>
             <p>Siffrorna är <strong>uppskattningar</strong> för en typisk dusch respektive ett typiskt bad. Din verkliga förbrukning kan vara högre eller lägre beroende på duschmunstycke, vattentemperatur och hur länge du står i duschen. Använd resultatet för att se storleksordning och variation över dagen – inte som exakt fakturabelopp.</p>
@@ -152,6 +220,23 @@
             <p>Beräkningen inkluderar inte: fasta avgifter till elnätsbolag eller elleverantör, moms på el, eller skillnader mellan olika elavtal. Pool, badtunna och värmepump för varmvatten är inte inräknade – för sådant behöver du andra kalkyler. Vi har skrivit <a href="artiklar/index.html">artiklar</a> om badtunna, pool och elkostnader om du vill läsa mer.</p>
             <h3>Tips för att sänka kostnaden</h3>
             <p>Om du har rörligt elpris kan du ofta sänka kostnaden genom att duscha eller bada när timpriset är lägre (t.ex. på natten eller under perioder med låg last). Korta duschar och lägre flöde minskar både el och vattenförbrukning. Grafen ovan visar när det är billigast och dyrast idag i ditt område.</p>
+        </div>
+        <div class="info-box">
+            <h3>Läs mer om elkostnader hemma</h3>
+            <p>Utöver bad och dusch skriver vi om vad annat i hemmet kostar i el. Välj en artikel nedan:</p>
+            <ul>
+                <li><a href="artiklar/spara-el-i-badrummet.html">Spara el i badrummet – 8 konkreta tips</a></li>
+                <li><a href="artiklar/vad-kostar-varmvatten-per-manad.html">Vad kostar varmvattnet per månad?</a></li>
+                <li><a href="artiklar/vad-kostar-bastu.html">Vad kostar bastun att ha igång?</a></li>
+                <li><a href="artiklar/vad-kostar-tvattstallen.html">Vad kostar det att tvätta kläder?</a></li>
+                <li><a href="artiklar/vad-kostar-diskmaskinen.html">Vad kostar det att köra diskmaskinen?</a></li>
+                <li><a href="artiklar/vad-kostar-elgolvvarme.html">Vad kostar elgolvvärme per månad?</a></li>
+                <li><a href="artiklar/vad-kostar-elbilen-att-ladda.html">Vad kostar det att ladda elbilen hemma?</a></li>
+                <li><a href="artiklar/elomraden-i-sverige.html">Elområden i Sverige – SE1, SE2, SE3, SE4 förklarade</a></li>
+                <li><a href="artiklar/rorligt-eller-fast-elpris.html">Rörligt eller fast elpris – vad passar dig?</a></li>
+                <li><a href="artiklar/vad-kostar-badtunna.html">Vad kostar det att bada badtunna?</a></li>
+                <li><a href="artiklar/pool-vs-badtunna.html">Pool vs badtunna – vad är billigast?</a></li>
+            </ul>
         </div>
     </main>
 
