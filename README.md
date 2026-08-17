@@ -1,5 +1,24 @@
 # VadKostarBadet.se – Spec
 
+> ## ⚰️ Avslutat projekt (augusti 2026)
+>
+> Sajten är nedlagd och underhålls inte. Repot är arkiverat och ligger kvar som minne, inte som något att bygga vidare på.
+>
+> **Vad det var:** en kalkylator som visade vad det kostar att duscha eller bada just nu, baserat på timpriset på el i ditt elområde. Byggt vintern 2025/2026, före Aelg AB, som ett försök att tjäna lite pengar på nätet med AdSense.
+>
+> **Varför det lades ner:** Google godkände aldrig AdSense-ansökan — "för lite innehåll". Fjorton artiklar skrevs för att möta kravet. Det hjälpte inte. Utan annonsintäkter fanns ingen anledning att hålla domän och konto vid liv.
+>
+> **Vad som togs bort vid nedläggningen:**
+> - AdSense-verifieringsskriptet (`ca-pub-…`) ur samtliga 20 HTML-sidor
+> - Projektets kontakt-mail (en separat Gmail som avvecklats) ur kontaktsidan
+> - Påståenden om annonser och cookies i integritetspolicyn, som inte längre stämde
+>
+> **Kvar att göra utanför repot:** domänen `vadkostarbadet.se` får löpa ut vid nästa förnyelse, och GitHub Pages custom domain är avstängd. Mailadressen är död — mail dit studsar.
+>
+> Koden nedan beskriver sajten som den såg ut när den fungerade.
+
+---
+
 Mål: Visa vad det kostar att duscha och bada just nu baserat på elpris (timpris) och användarens elområde.
 
 Elområden:
